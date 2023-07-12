@@ -2,6 +2,7 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const neru = require('neru-alpha').neru
+const OpenTok = require('opentok');
 
 
 
@@ -9,6 +10,9 @@ const neru = require('neru-alpha').neru
 const state = neru.getInstanceState()
 const app = express()
 
+const apiKey = process.env.VIDEO_API_KEY;
+const apiSecret = process.env.VIDEO_API_SECRET;
+const opentok = new OpenTok(apiKey, apiSecret)
 
 
 
@@ -27,25 +31,35 @@ app.get('/session/:room', async (req, res) => {
     const  sessionId  = await state.hget('sessions', roomName)
     console.log(sessionId);
     if (sessionId !== null) {
-      console.log(sessionId)
-      const data = opentok.generateToken(sessionId);
-      res.json({
+      console.log(`Generating token for existing session: ${sessionId}`)
+      const data = {
         sessionId: sessionId,
-        token: data.token,
-        apiKey: data.apiKey,
-      });
+        apiKey: apiKey,
+      }
+      data.token = opentok.generateToken(sessionId);
+      res.json(data);
     } else {
-      const data = await opentok.getCredentials();
-      console.log("setting session Id in state engine")
-      let saveInfo = []
-      saveInfo[roomName] = data.sessionId
-      await state.hset('sessions', saveInfo)
+      const data = {
+        apiKey: apiKey,
+      }
 
-      res.json({
-        sessionId: data.sessionId,
-        token: data.token,
-        apiKey: data.apiKey,
-      });
+      const sessionOptions = {
+        mediaMode: "routed"
+      }
+
+      opentok.createSession(sessionOptions, (error, session)=>{
+        if(error){
+          console.log(error)
+        } else {
+          data.sessionId = session.sessionId
+          data.token = opentok.generateToken(data.sessionId)
+          res.json(data)
+          console.log("setting session Id in state engine")
+          let saveInfo = []
+          saveInfo[roomName] = data.sessionId
+          state.hset('sessions', saveInfo)
+        }
+      })
     }
   } catch (error) {
     console.log(error.message);
