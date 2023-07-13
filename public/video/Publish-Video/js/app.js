@@ -3,6 +3,15 @@
 let apiKey;
 let sessionId;
 let token;
+
+let room = new RoomHarness("../../session/", true, ()=>{
+  apiKey = room.apiKey
+  sessionId = room.sessionId
+  token = room.token
+  initializeSession()
+})
+
+
 const videoEl = document.querySelector('#video');
 
 function handleError(error) {
@@ -70,32 +79,3 @@ function initializeSession() {
   publish();
 }
 
-// See the config.js file.
-if (API_KEY && TOKEN && SESSION_ID) {
-  apiKey = API_KEY;
-  sessionId = SESSION_ID;
-  token = TOKEN;
-  if (!videoEl.captureStream) {
-    alert('This browser does not support VideoElement.captureStream(). You must use Google Chrome.');
-  } else {
-    initializeSession();
-  }
-} else if (SAMPLE_SERVER_BASE_URL) {
-  // Make a GET request to get the OpenTok API key, session ID, and token from the server
-  fetch(SAMPLE_SERVER_BASE_URL + '/session')
-  .then((response) => response.json())
-  .then((json) => {
-    apiKey = json.apiKey;
-    sessionId = json.sessionId;
-    token = json.token;
-    if (!videoEl.captureStream) {
-      alert('This browser does not support VideoElement.captureStream(). You must use Google Chrome.');
-    } else {
-      // Initialize an OpenTok Session object
-      initializeSession();
-    }
-  }).catch((error) => {
-    handleError(error);
-    alert('Failed to get opentok sessionId and token. Make sure you have updated the config.js file.');
-  });
-}
