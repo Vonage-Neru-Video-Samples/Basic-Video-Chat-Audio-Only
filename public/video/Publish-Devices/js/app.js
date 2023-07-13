@@ -1,5 +1,16 @@
 /* global OT */
 
+let apiKey
+let sessionId
+let token
+
+const room = new RoomHarness("../../session/", true, ()=>{
+  apiKey = room.apiKey
+  sessionId = room.sessionId
+  token = room.token
+  initializeSession()
+})
+
 (function closure() {
   const audioSelector = document.querySelector('#audio-source-select');
   const videoSelector = document.querySelector('#video-source-select');
