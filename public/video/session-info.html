@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+
+        </title>
+        <style>
+            body {
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+
+            .output {
+                font-family: monospace;
+                margin-left: 20px;
+                margin-right: 20px;
+                overflow-wrap: anywhere;
+                font-size: medium;
+            }
+
+            .output-title {
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                font-size: large;
+                font-weight: bold;
+            }
+
+        </style>
+        <script src="../js/common/roomharness.js"></script>
+    </head>
+    <body>
+
+        <h1>Vonage Video API - Sample and Test Applications</h1>
+        
+        <div id="access-form">
+            <b>Your Room Name:</b> <span id="room-name"></span>
+        </div>
+
+        <p>
+            Use the code/info below to connect to the session associated with this room name.
+        </p>
+
+        <div class="output" id="output">
+
+        </div>
+
+        <script>
+
+
+            let apiKey
+            let sessionId
+            let token
+
+            let room = new RoomHarness("../session/", true, ()=>{
+                apiKey = room.apiKey
+                sessionId = room.sessionId
+                token = room.token
+                displaySessionCredentials(apiKey, sessionId, token)
+                document.getElementById('room-name').innerHTML = room.roomName
+            })
+
+
+            
+
+            function displaySessionCredentials(a,s,t){
+                let divOut = document.getElementById("output")
+                let out = ""
+                out += `
+
+                <div class="output-title">Session Token Info</div>
+
+                API KEY: ${a}
+                SESSION ID: ${s}
+                TOKEN: ${t}
+
+                <div class="output-title">iOS SDK - Swift</div>
+                
+                let kApiKey = "${a}"
+                let kSessionId = "${s}"
+                let kToken = "${t}"
+
+                <div class="output-title">Android SDK - Kotlin</div>
+
+                const val API_KEY = "${a}"
+                const val SESSION_ID = "${s}"
+                const val TOKEN = "${t}"
+
+                <div class="output-title">Android SDK - Java</div>
+
+                public static final String API_KEY = "${a}";
+                public static final String SESSION_ID = "${s}";
+                public static final String TOKEN = "${t}";
+
+
+                <div class="output-title">Mac OS SDK - C++</div>
+
+                static char* const kApiKey = "${a}";
+                static char* const kSessionId = "${s}";
+                static char* const kToken = "${t}";
+
+                
+                `
+                
+                divOut.innerHTML = out.replace(/\n/g, "<br/>")
+            }
+
+        </script>
+    </body>
+</html>
