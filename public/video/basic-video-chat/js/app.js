@@ -2,7 +2,7 @@ let apiKey;
 let sessionId;
 let token;
 
-let room = new Room("../../session/", true, ()=>{
+let room = new RoomHarness("../../session/", true, ()=>{
   apiKey = room.apiKey
   sessionId = room.sessionId
   token = room.token

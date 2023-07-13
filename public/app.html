@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Video API Testing</title>
-    <script src="./js/common/room.js"></script>
+    <script src="./js/common/roomharness.js"></script>
     <style>
       body {
           font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -23,7 +23,7 @@
             Then choose your method for accessing this room from the samples below.
         </p>
         <p>
-            Or just <a href="./session-info.html">Get a Session Id and Token</a> for use in a Native SDK
+            Or just <a href="javascript:openTestPage('./session-info.html')">Get a Session Id and Token</a> for use in a Native SDK
         </p>
 
         <ul>
@@ -37,8 +37,8 @@
 
         <script>
 
-            const room = new Room("./session/", false, {})
-            
+            const room = new RoomHarness("./session/", false, {})
+
             document.getElementById("room-name").value = room.roomName
             
             function openTestPage(page){
