@@ -1,11 +1,14 @@
-/* global OT API_KEY TOKEN SESSION_ID SAMPLE_SERVER_BASE_URL */
-
-
 let apiKey;
 let sessionId;
 let token;
-let room = window.localStorage.getItem("roomName") || "default"
-let sessionUrl = window.location.href + "../../session/" + room
+
+let room = new Room("../../session/", true, ()=>{
+  apiKey = room.apiKey
+  sessionId = room.sessionId
+  token = room.token
+  initializeSession()
+})
+
 
 function handleError(error) {
   if (error) {
@@ -49,19 +52,4 @@ function initializeSession() {
   });
 }
 
-// See the config.js file.
-if (sessionUrl) {
-  // Make a GET request to get the OpenTok API key, session ID, and token from the server
-  fetch(sessionUrl)
-  .then((response) => response.json())
-  .then((json) => {
-    apiKey = json.apiKey;
-    sessionId = json.sessionId;
-    token = json.token;
-    // Initialize an OpenTok Session object
-    initializeSession();
-  }).catch((error) => {
-    handleError(error);
-    alert('Failed to get opentok sessionId and token. Make sure you have updated the config.js file.');
-  });
-}
+

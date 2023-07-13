@@ -1,6 +1,55 @@
 <html>
   <head>
     <title>Video API Testing</title>
+    <script src="./js/common/room.js"></script>
+    <style>
+      body {
+          font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+  </style>
   </head>
-  <body>Express is sharing the Public folder</body>
+  <body>
+    <h1>Vonage Video API - Sample and Test Applications</h1>
+        
+        <p>
+            Enter an appropriate room name below.  You can share this with others.
+        </p>
+        
+        <div id="access-form">
+            <b>Enter Room Name:</b> <input id="room-name" onkeyup="room.roomName=this.value" type="text" size="30" value="">
+        </div>
+
+        <p>
+            Then choose your method for accessing this room from the samples below.
+        </p>
+        <p>
+            Or just <a href="./session-info.html">Get a Session Id and Token</a> for use in a Native SDK
+        </p>
+
+        <ul>
+            <li><a href="javascript:openTestPage('basic-video-chat')">Basic Video Chat</a></li>
+            <li><a href='./Basic-Background-Blur'>Basic Background Blur</a></li>
+            <li><a href='./Basic-Captions'>Basic Captions - WIP - Needs server side update</a></li>
+            
+        </ul>
+
+
+
+        <script>
+
+            const room = new Room("./session/", false, {})
+            
+            document.getElementById("room-name").value = room.roomName
+            
+            function openTestPage(page){
+
+                let pageUrl = `./video/${page}?roomName=${room.roomName}`
+                window.location.href = pageUrl
+
+            }
+
+        </script>
+
+
+  </body>
 </html>
