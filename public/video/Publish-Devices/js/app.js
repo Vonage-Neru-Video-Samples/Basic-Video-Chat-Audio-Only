@@ -1,17 +1,14 @@
-/* global OT */
 
-let apiKey
-let sessionId
-let token
+let apiKey = false
+let sessionId = false
+let token = false
 
-const room = new RoomHarness("../../session/", true, ()=>{
-  apiKey = room.apiKey
-  sessionId = room.sessionId
-  token = room.token
-  initializeSession()
-})
+const room = new RoomHarness("../../session/", false, {})
+apiKey = room.apiKey
+sessionId = room.sessionId
+token = room.token
 
-(function closure() {
+
   const audioSelector = document.querySelector('#audio-source-select');
   const videoSelector = document.querySelector('#video-source-select');
   const publishBtn = document.querySelector('#publish-btn');
@@ -115,4 +112,4 @@ const room = new RoomHarness("../../session/", true, ()=>{
       meter.value = logLevel;
     });
   }
-})();
+
