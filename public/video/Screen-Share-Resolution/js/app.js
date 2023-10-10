@@ -4,6 +4,7 @@ let token;
 let session;
 let publisher;
 let subscriber;
+let mst;
 
 function getSessionCredentials(room){
   const urlParams = new URL(window.location.toLocaleString()).searchParams;
@@ -35,8 +36,31 @@ function handleError(error) {
   }
 }
 
-function publishScreen(){
+function initSession(){
   initializeSession()
+}
+
+function publishScreen(){
+
+  // use getDisplayMedia() to get a custom video Stream
+  navigator.mediaDevices.getDisplayMedia()
+  .then(ms=>{
+    console.log(ms)
+    mst = ms.getVideoTracks()[0]
+    const publisherOptions = {
+      insertMode: 'append',
+      videoSource: mst,
+      width: '100%',
+      height: '100%',
+      resolution: "1920x1080"
+    };
+    publisher = OT.initPublisher('publisher', publisherOptions, handleError)
+    session.publish(publisher)
+  })
+  .catch(e=>{
+    console.log(e)
+  })
+  
 }
 
 getSessionCredentials()
@@ -58,23 +82,14 @@ function initializeSession() {
     console.log('You were disconnected from the session.', event.reason);
   });
 
-  // initialize the publisher
-  const publisherOptions = {
-    insertMode: 'append',
-    videoSource: "screen",
-    width: '100%',
-    height: '100%',
-    resolution: "1280x720"
-  };
-  publisher = OT.initPublisher('publisher', publisherOptions, handleError);
-
+  
   // Connect to the session
   session.connect(token, (error) => {
     if (error) {
       handleError(error);
     } else {
       // If the connection is successful, publish the publisher to the session
-      session.publish(publisher, handleError);
+      //session.publish(publisher, handleError);
     }
   });
 }
