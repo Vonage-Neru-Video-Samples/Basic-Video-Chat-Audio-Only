@@ -2,21 +2,13 @@ let apiKey;
 let sessionId;
 let token;
 
-function getSessionCredentials(room){
-  fetch('../../session/' + room).then(function fetch(res) {
-      return res.json()
-  }).then(function fetchJson(json) {
-      json = JSON.parse(json)
-      console.log(json)
-      apiKey = json.apiKey
-      sessionId = json.sessionId
-      token = json.token
-      initializeSession()
-  }).catch(function catchErr(error) {
-      console.log(error);
-      console.log('Failed to get opentok sessionId and token. Make sure you have updated the config.js file.');
-  })
-}
+let room = new RoomHarness("../../session/", true, ()=>{
+  apiKey = room.apiKey
+  sessionId = room.sessionId
+  token = room.token
+  initializeSession()
+})
+
 
 function handleError(error) {
   if (error) {

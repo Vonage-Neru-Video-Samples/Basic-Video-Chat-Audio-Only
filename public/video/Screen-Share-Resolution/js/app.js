@@ -1,17 +1,28 @@
 let apiKey;
 let sessionId;
 let token;
+let session;
+let publisher;
+let subscriber;
 
 function getSessionCredentials(room){
-  fetch('../../session/' + room).then(function fetch(res) {
+  const urlParams = new URL(window.location.toLocaleString()).searchParams;
+  let roomName = urlParams.get('roomName');
+  console.log(roomName)
+  if(roomName == null || roomName.length < 3)
+      window.location.href = "./app.html?roomName=default-1234"
+            
+  fetch('../../session/' + roomName)
+  .then(function fetch(res) {
       return res.json()
-  }).then(function fetchJson(json) {
-      json = JSON.parse(json)
+  })
+  .then(function fetchJson(json) {
       console.log(json)
+      //json = JSON.parse(json)
       apiKey = json.apiKey
       sessionId = json.sessionId
       token = json.token
-      initializeSession()
+      //initializeSession()
   }).catch(function catchErr(error) {
       console.log(error);
       console.log('Failed to get opentok sessionId and token. Make sure you have updated the config.js file.');
@@ -24,8 +35,14 @@ function handleError(error) {
   }
 }
 
+function publishScreen(){
+  initializeSession()
+}
+
+getSessionCredentials()
+
 function initializeSession() {
-  const session = OT.initSession(apiKey, sessionId);
+  session = OT.initSession(apiKey, sessionId);
 
   // Subscribe to a newly created stream
   session.on('streamCreated', (event) => {
@@ -34,7 +51,7 @@ function initializeSession() {
       width: '100%',
       height: '100%'
     };
-    session.subscribe(event.stream, 'subscriber', subscriberOptions, handleError);
+    subscriber = session.subscribe(event.stream, 'subscriber', subscriberOptions, handleError);
   });
 
   session.on('sessionDisconnected', (event) => {
@@ -44,10 +61,12 @@ function initializeSession() {
   // initialize the publisher
   const publisherOptions = {
     insertMode: 'append',
+    videoSource: "screen",
     width: '100%',
-    height: '100%'
+    height: '100%',
+    resolution: "1280x720"
   };
-  const publisher = OT.initPublisher('publisher', publisherOptions, handleError);
+  publisher = OT.initPublisher('publisher', publisherOptions, handleError);
 
   // Connect to the session
   session.connect(token, (error) => {

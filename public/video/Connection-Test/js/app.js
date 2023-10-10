@@ -2,21 +2,21 @@ let apiKey;
 let sessionId;
 let token;
 
-function getSessionCredentials(room){
-  fetch('../../session/' + room).then(function fetch(res) {
-      return res.json()
-  }).then(function fetchJson(json) {
-      json = JSON.parse(json)
-      console.log(json)
-      apiKey = json.apiKey
-      sessionId = json.sessionId
-      token = json.token
-      initializeSession()
-  }).catch(function catchErr(error) {
-      console.log(error);
-      console.log('Failed to get opentok sessionId and token. Make sure you have updated the config.js file.');
-  })
-}
+let sessionConnectedDisplay = document.getElementById("sessionconnecteddisplay")
+let publishingDisplay = document.getElementById("publishingdisplay")
+let subscribingDisplay = document.getElementById("subscribingdisplay")
+
+setBg(sessionConnectedDisplay, "red")
+setBg(publishingDisplay, "red")
+setBg(subscribingDisplay, "red")
+
+let room = new RoomHarness("../../session/", true, ()=>{
+  apiKey = room.apiKey
+  sessionId = room.sessionId
+  token = room.token
+  initializeSession()
+})
+
 
 function handleError(error) {
   if (error) {
@@ -55,9 +55,12 @@ function initializeSession() {
       handleError(error);
     } else {
       // If the connection is successful, publish the publisher to the session
-      session.publish(publisher, handleError);
+      // session.publish(publisher, handleError);
     }
   });
 }
 
 
+function setBg(el, col){
+  el.style.backgroundColor = col
+}

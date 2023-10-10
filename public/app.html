@@ -1,7 +1,6 @@
 <html>
   <head>
     <title>Video API Testing</title>
-    <script src="./js/common/roomharness.js"></script>
     <style>
       body {
           font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -16,7 +15,7 @@
         </p>
         
         <div id="access-form">
-            <b>Enter Room Name:</b> <input id="room-name" onkeyup="room.roomName=this.value" type="text" size="30" value="">
+            <b>Enter Room Name:</b> <input id="room-name" onkeyup="roomName=this.value" type="text" size="30" value="" onchange="window.location.href = `./app.html?roomName=${this.value}`">
         </div>
 
         <p>
@@ -33,20 +32,32 @@
             <li><a href="javascript:openTestPage('Publish-Devices')">Publish Devices</a></li>
             <li><a href="javascript:openTestPage('Publish-Canvas')">Publish Canvas</a></li>
             <li><a href="javascript:openTestPage('Stereo-Audio')">Publish Stereo Audio</a></li>
-            
+            <li><a href="javascript:openTestPage('Connection-Test')">Session Connection Test</a></li>
         </ul>
 
 
+        <ul>
+            <li><a href="javascript:openTestPage('Screen-Share-Resolution')">Screen Share Resolution Tesing</a></li>
+         </ul>
+
+
+        
 
         <script>
 
-            const room = new RoomHarness("./session/", false, {})
+            const urlParams = new URL(window.location.toLocaleString()).searchParams;
+            let roomName = urlParams.get('roomName');
 
-            document.getElementById("room-name").value = room.roomName
+            console.log(roomName)
+
+            if(roomName == null || roomName.length < 3)
+                window.location.href = "./app.html?roomName=default-1234"
+            
+            document.getElementById("room-name").value = roomName
             
             function openTestPage(page){
 
-                let pageUrl = `./video/${page}?roomName=${room.roomName}`
+                let pageUrl = `./video/${page}?roomName=${roomName}`
                 window.location.href = pageUrl
 
             }
