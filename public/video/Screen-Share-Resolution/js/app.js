@@ -42,24 +42,7 @@ function initSession(){
 
 function publishScreen(){
 
-  // use getDisplayMedia() to get a custom video Stream
-  navigator.mediaDevices.getDisplayMedia()
-  .then(ms=>{
-    console.log(ms)
-    mst = ms.getVideoTracks()[0]
-    const publisherOptions = {
-      insertMode: 'append',
-      videoSource: mst,
-      width: '100%',
-      height: '100%',
-      resolution: "1920x1080"
-    };
-    publisher = OT.initPublisher('publisher', publisherOptions, handleError)
-    session.publish(publisher)
-  })
-  .catch(e=>{
-    console.log(e)
-  })
+  session.publish(publisher)
   
 }
 
@@ -82,6 +65,14 @@ function initializeSession() {
     console.log('You were disconnected from the session.', event.reason);
   });
 
+  const publisherOptions = {
+    insertMode: 'append',
+    videoSource: "screen",
+    width: '100%',
+    height: '100%'
+  }
+  publisher = OT.initPublisher('publisher', publisherOptions, handleError)
+  session.publish(publisher)
   
   // Connect to the session
   session.connect(token, (error) => {

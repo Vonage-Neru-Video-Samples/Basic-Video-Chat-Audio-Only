@@ -40,6 +40,15 @@ function initializeSession() {
   session.on('sessionDisconnected', (event) => {
     console.log('You were disconnected from the session.', event.reason);
   });
+  
+  session.on("streamDestroyed", (event)=>{
+
+    if (event.reason === "clientDisconnected") {
+    alert("Call disconnected by the user");
+    window.close();
+    }
+    
+  });
 
   // initialize the publisher
   const publisherOptions = {
