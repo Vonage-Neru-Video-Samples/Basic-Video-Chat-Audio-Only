@@ -23,8 +23,26 @@ app.get('/', (req, res) => {
   res.redirect('/app.html')
 })
 
+
+app.get('/session/:room',(req, res)=>{
+  const { room: roomName } = req.params
+  const getUrl = 'https://neru-68eeb4cf-video-server-live.euw1.runtime.vonage.cloud/session/' + roomName
+  console.log("GETTING: ", 'https://neru-68eeb4cf-video-server-live.euw1.runtime.vonage.cloud/session/' + roomName)
+  https.get(getUrl, (response) => {
+    console.log('statusCode:', response.statusCode);
+    console.log('headers:', response.headers);
+    response.on('data', (d) => {
+      res.json(d.toString())
+    })
+  }).on('error', (e) => {
+    console.log(e)
+    res.send(e)
+  })
+})
+
+
 // Use /session/room to get apiKey, secret and token for access
-app.get('/session/:room', async (req, res) => {
+/* app.get('/session/:room', async (req, res) => {
   try {
     const { room: roomName } = req.params;
     console.log("getting session ID from State Engine for Room: " + roomName)
@@ -66,7 +84,7 @@ app.get('/session/:room', async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 
-});
+}); */
 
 app.get('/_/health', async (req, res) => {
   res.sendStatus(200);
