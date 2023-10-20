@@ -1,4 +1,5 @@
 const express = require('express')
+const https = require('https')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const neru = require('neru-alpha').neru
@@ -27,7 +28,7 @@ app.get('/', (req, res) => {
 app.get('/session/:room',(req, res)=>{
   const { room: roomName } = req.params
   const getUrl = 'https://neru-68eeb4cf-video-server-live.euw1.runtime.vonage.cloud/session/' + roomName
-  console.log("GETTING: ", 'https://neru-68eeb4cf-video-server-live.euw1.runtime.vonage.cloud/session/' + roomName)
+  console.log("GETTING: ", getUrl)
   https.get(getUrl, (response) => {
     console.log('statusCode:', response.statusCode);
     console.log('headers:', response.headers);
