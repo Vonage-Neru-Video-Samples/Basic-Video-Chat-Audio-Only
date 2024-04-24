@@ -87,6 +87,14 @@ app.get('/session/:room',(req, res)=>{
 
 }); */
 
+app.post('/callback/:endpoint',(req, res)=>{
+  const { endpoint: endpointName } = req.params
+  console.log("Received Callback for Endpoint: " + endpointName)
+  console.log(req.body)
+  res.sendStatus(200)
+  
+})
+
 app.get('/_/health', async (req, res) => {
   res.sendStatus(200);
 });

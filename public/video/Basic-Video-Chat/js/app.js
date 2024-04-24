@@ -3,10 +3,11 @@ let sessionId;
 let token;
 
 function getSessionCredentials(room){
-  fetch('../../session/' + room).then(function fetch(res) {
+  console.log("Getting Session and Token for room: ", room)
+  fetch('https://neru-68eeb4cf-video-server-live.euw1.runtime.vonage.cloud/session/47807831/' + room).then(function fetch(res) {
       return res.json()
   }).then(function fetchJson(json) {
-      json = JSON.parse(json)
+      //json = JSON.parse(json)
       console.log(json)
       apiKey = json.apiKey
       sessionId = json.sessionId
@@ -18,13 +19,19 @@ function getSessionCredentials(room){
   })
 }
 
+let roomName = new URLSearchParams(window.location.search).get('roomName')
+
+getSessionCredentials(roomName)
+
+
+
 function handleError(error) {
   if (error) {
     console.error(error);
   }
 }
 
-getSessionCredentials()
+
 
 
 function initializeSession() {
@@ -45,19 +52,20 @@ function initializeSession() {
   });
   
   session.on("streamDestroyed", (event)=>{
-
     if (event.reason === "clientDisconnected") {
-    alert("Call disconnected by the user");
-    window.close();
-    }
-    
+    console.log("Call disconnected by the user");
+    }  
   });
 
+  session.on("connectionCreated", (event)=>{ console.log(event.type, event.connection.id)})
+  session.on("connectionDestroyed", (event)=>{ console.log(event.type, event.connection.id)})
+  
   // initialize the publisher
   const publisherOptions = {
     insertMode: 'append',
     width: '100%',
-    height: '100%'
+    height: '100%',
+    resolution: '1280x720'
   };
   const publisher = OT.initPublisher('publisher', publisherOptions, handleError);
 

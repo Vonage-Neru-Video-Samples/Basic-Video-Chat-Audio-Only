@@ -39,6 +39,12 @@
         <ul>
             <li><a href="javascript:openTestPage('Screen-Share-Resolution')">Screen Share Resolution Tesing</a></li>
             <li><a href="javascript:openTestPage('Audio-Level-Meter')">Audio Level Meter - Event testing</a></li>
+            <li><a href="javascript:openTestPage('Subscriber-Manipulation')">Subscriber Manipulation Testing</a></li>
+            <li><a href="javascript:openTestPage('Video-Express')">Vonage Video Express (VVE)</a></li>
+            <li><a href="javascript:openTestPage('Publish-Screen-Through-Canvas')">Publish Screen Through Canvas</a></li>
+        
+        
+        
         </ul>
 
 
@@ -58,7 +64,7 @@
             
             function openTestPage(page){
 
-                let pageUrl = `./video/${page}?roomName=${roomName}`
+                let pageUrl = `./video/${page}/?roomName=${roomName}`
                 window.location.href = pageUrl
 
             }

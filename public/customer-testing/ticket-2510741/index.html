@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Caption Test</title>
+        <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+        <style>
+            #publisher {
+                display: block;
+                width: 400px;
+                height: 300px;
+            }
+            #subscriber {
+                display: block;
+                width: 400px;
+                height: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="publisher"></div>
+        <div id="subscriber"></div>
+        <script>
+
+            var apiKey = '47807831';
+            var sessionId = '2_MX40NzgwNzgzMX5-MTcxMjg0NjY2MzY4M35ITFp2N1JTMzBET0ZxM3o0WUNYZHgvZnV-fn4';           
+            var token = 'T1==cGFydG5lcl9pZD00NzgwNzgzMSZzaWc9NTA5OGZiNGFhMTkwZWQ2NmNkMzAwOWMwODBhYTVkNmFiMTVlMGM4ZDpzZXNzaW9uX2lkPTJfTVg0ME56Z3dOemd6TVg1LU1UY3hNamcwTmpZMk16WTRNMzVJVEZwMk4xSlRNekJFVDBaeE0zbzBXVU5ZWkhndlpuVi1mbjQmY3JlYXRlX3RpbWU9MTcxMjkxMTY3NiZub25jZT0wLjM0Mjg3Mzk5NzQxOTkzNTk2JnJvbGU9bW9kZXJhdG9yJmV4cGlyZV90aW1lPTE3MTI5OTgwNzYmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=';
+            
+            // Initialize OpenTok session
+            var session = OT.initSession(apiKey, sessionId);
+            
+            var publisher = OT.initPublisher('publisher', {
+            insertMode: 'append',
+            width: '100%',
+            height: '100%',
+            publishCaptions:true
+            });
+            // Connect to session and publish audio-only
+            session.connect(token, function(error) {
+            if (error) {
+            console.error('Failed to connect', error);
+            } else {
+            session.publish(publisher, function(error) {
+            if (error) {
+            console.error('Failed to publish', error);
+            }
+            });
+            
+            }
+            });
+            
+            // Subscribe to streams (optional)
+            session.on('streamCreated', function(event) {
+            subscriber = session.subscribe(event.stream, 'subscriber', {
+            insertMode: 'append',
+            width: '100%',
+            height: '100%'
+            });
+            alert("subscriber connected");
+            subscriber.subscribeToCaptions(true);
+            const isSubscribed = subscriber.isSubscribedToCaptions()
+            alert(isSubscribed)
+            
+            subscriber.on('captionReceived', function(event){
+                console.log(`Caption received for stream ${event.streamId}`);
+                console.log(`Caption text: ${event.caption}`);
+                console.log(`Final text: ${event.isFinal}`);
+            })
+            
+            
+            });
+            
+        </script>
+    </body>
+</html>
+
