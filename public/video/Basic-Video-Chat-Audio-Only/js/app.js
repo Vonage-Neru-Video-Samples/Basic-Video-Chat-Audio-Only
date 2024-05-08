@@ -62,10 +62,8 @@ function initializeSession() {
   
   // initialize the publisher
   const publisherOptions = {
-    insertMode: 'append',
-    width: '100%',
-    height: '100%',
-    resolution: '1280x720'
+    videoSource: null,
+    publishVideo: false
   };
   const publisher = OT.initPublisher('publisher', publisherOptions, handleError);
 
