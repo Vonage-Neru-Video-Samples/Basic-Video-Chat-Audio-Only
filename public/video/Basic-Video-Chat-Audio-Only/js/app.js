@@ -111,8 +111,7 @@ function initializeSession() {
 
     const publisher = OT.initPublisher('publisher', publisherOptions, async (err) => {
       if (err) {
-        console.error('Publisher creation error: ', err);
-        reject(err)
+        console.error('Publisher creation error: ', err)
       } else {
         //audioSource ? publisher.setAudioSource(this.audioSource) : ''
         //videoSource ? publisher.setVideoSource(videoSource) : ''
