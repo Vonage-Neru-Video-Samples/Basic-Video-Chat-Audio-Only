@@ -99,12 +99,7 @@ function initializeSession() {
       "insertMode": "append",
       "width": "100%",
       "height": "100%",
-      "name": "{\"role\":\"provider\",\"platform\":\"web\",\"designation_desc\":\"Provider\",\"role_id\":1,\"role_name\":\"Vyas, Dr. Meet\",\"joined_timestamp\":\"2024-05-08T12:42:39.894Z\"}",
-      "videoSource": videoSource, //it will be null if no video source
-      "publishVideo": videoSource ? true : false,
-      "audioSource": audioSource, //it will be null if no video source
-      "publishAudio": audioSource ? true : false,
-      "capableSimulcastScreenshare": false
+      "publishVideo": false
     }
 
     console.log(publisherOptions)
